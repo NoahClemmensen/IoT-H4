@@ -1,0 +1,23 @@
+<div class="modal fade" id="addKeycardModal" tabindex="-1" aria-labelledby="addKeycardModalLabel" aria-hidden="true">
+    <form method="POST" id="addKeycardForm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addKeycardModalLabel">Add keycard</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="keycard_uid" class="form-label">Keycard unique key</label>
+                        <input type="text" class="form-control" id="keycard_uid" name="keycard_uid"
+                               value="" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

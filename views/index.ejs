@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="en">
+<%- include('partials/head') %>
+<body class="d-flex min-vh-100 min-vw-100 justify-content-center align-items-center">
+<div class="p-5 bg-white bg-opacity-10 border border-white rounded d-flex flex-column" style="min-width: 50%">
+    <section>
+        <h1><%= title %></h1>
+        <p>Welcome to <%= title %></p>
+        <!--<img src="data:image/jpg;base64,{put your base64 here. It usually starts with /9j/}" alt="ALT" />-->
+        <p>To see live video go to <a href="http://192.168.1.133:5000/video_feed">http://192.168.1.133:5000/video_feed</a></p>
+        <iframe style="height: 480px; width: 640px;" src="http://192.168.1.133:5000/video_feed"></iframe>
+    </section>
+    <section>
+        <h2>Settings</h2>
+        <form method="POST" id="settingsForm">
+            <div class="mb-3">
+                <label for="temp_threshold" class="form-label">Temperature threshold (°C)</label>
+                <input type="number" class="form-control" id="temp_threshold" name="temp_threshold"
+                       value="<%= settings.temp_threshold %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="interval" class="form-label">Interval (Ms)</label>
+                <input type="number" class="form-control" id="interval" name="interval" value="<%= settings.interval %>"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="keypad_code" class="form-label">Keypad Code</label>
+                <input type="text" class="form-control" id="keypad_code" name="keypad_code"
+                       value="<%= settings.keypad_code %>"
+                       required>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+        </form>
+    </section>
+    <section>
+        <h2>Staff</h2>
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+            Add staff
+        </button>
+        <%- include('./partials/modals/addStaff') %>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Keycard</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody id="staffTable">
+            <% staff.forEach(function(staffMember) { %>
+                <tr>
+                    <td>
+                        <label for="name-<%= staffMember._id %>"></label>
+                        <input id="name-<%= staffMember._id %>" type="text" value="<%= staffMember.name %>">
+                    </td>
+                    <td>
+                        <label for="keycard-<%= staffMember._id %>"></label>
+                        <select id="keycard-<%= staffMember._id %>">
+                            <option value="-1" <%= !staffMember.keycard_id ? 'selected' : '' %>>None</option>
+                            <% keycards.forEach(function(keycard) { %>
+                                <option value="<%= keycard.uid %>" <%= staffMember.keycard_id === keycard.uid ? 'selected' : '' %>><%= keycard.uid %></option>
+                            <% }); %>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" onclick="saveStaff('<%= staffMember._id %>')">Save</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteStaff('<%= staffMember._id %>')">Delete</button>
+                    </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </section>
+    <section>
+        <h2>Keycards</h2>
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addKeycardModal">
+            Add keycard
+        </button>
+        <%- include('./partials/modals/addKeycard') %>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">UID</th>
+                <th scope="col">Clearance</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody id="keycardTable">
+            <% keycards.forEach(function(keycard) { %>
+                <tr>
+                    <td><%= keycard.uid %></td>
+                    <td><%= keycard.name %></td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteKeycard('<%= keycard._id %>')">Delete</button>
+                    </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </section>
+</div>
+
+
+<%- include('partials/scripts') %>
+<script src="/javascripts/index.js"></script>
+</body>
+</html>
